@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>For You ❤️</title>
+    <title>For My Jhalla ❤️</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --primary: #ff4d6d;
-            --bg-color: #0f0f12; /* Deep dark background for focus */
+            --bg-color: #0f0f12;
             --text-color: #fceceb;
         }
 
@@ -18,7 +18,8 @@
             font-family: 'Nunito', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            height: 100dvh;
+            height: 100vh;
+            height: 100dvh; /* Mobile fix */
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -29,7 +30,7 @@
             transition: background-color 2s ease;
         }
 
-        /* Background Floating Hearts */
+        /* Floating Hearts Background */
         .hearts-bg {
             position: absolute;
             top: 0;
@@ -55,15 +56,17 @@
             100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Container styling */
+        /* Container Styling */
         .container {
-            width: 85%;
+            width: 90%;
             max-width: 400px;
             z-index: 10;
-            display: none; /* Hidden by default */
+            display: none;
             flex-direction: column;
             align-items: center;
             animation: fadeIn 1s ease forwards;
+            padding: 20px;
+            box-sizing: border-box; /* Prevents overflow */
         }
 
         .container.active {
@@ -75,23 +78,25 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Images */
+        /* Image Styling */
         img {
             width: 100%;
-            max-width: 250px;
+            max-width: 280px;
+            height: auto;
+            max-height: 350px; /* Limits height so buttons fit */
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(255, 77, 109, 0.2);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            object-fit: cover;
         }
 
-        /* The Poem Styling */
+        /* Poem Text */
         .poem-lines {
-            font-family: 'Nunito', sans-serif; /* Clean font for Hindi readability */
-            font-size: 1.25rem;
-            line-height: 1.8;
-            margin-bottom: 20px;
-            min-height: 150px; /* Keeps layout stable */
-            text-align: center;
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            min-height: 100px;
+            width: 100%;
         }
 
         .poem-line {
@@ -99,7 +104,7 @@
             opacity: 0;
             transform: translateY(10px);
             transition: all 1s ease;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
 
         .poem-line.visible {
@@ -109,14 +114,14 @@
 
         /* Buttons */
         .btn {
-            padding: 14px 32px;
+            padding: 12px 30px;
             font-size: 1.1rem;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: 'Nunito', sans-serif;
             font-weight: 700;
+            margin-top: 10px;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -124,26 +129,21 @@
             background: transparent;
             border: 2px solid rgba(255, 255, 255, 0.5);
             color: white;
-            margin-top: 20px;
         }
 
-        .next-btn:active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Question Screen Specifics */
+        /* Question Title */
         .question-title {
             font-family: 'Sacramento', cursive;
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             color: var(--primary);
-            margin: 0 0 30px 0;
-            line-height: 1.2;
-            text-shadow: 0 0 20px rgba(255, 77, 109, 0.5);
+            margin: 0 0 20px 0;
+            line-height: 1.1;
         }
 
+        /* --- BUTTON LOGIC FIX --- */
         .btn-group {
             position: relative;
-            height: 150px;
+            height: 150px; /* Space for flying button */
             width: 100%;
             display: flex;
             justify-content: center;
@@ -154,55 +154,57 @@
             background: var(--primary);
             color: white;
             box-shadow: 0 5px 20px rgba(255, 77, 109, 0.4);
-            z-index: 20;
-            position: relative;
+            z-index: 100;
+            position: relative; /* Kept relative to center it */
         }
 
         #noBtn {
             background: #fff;
             color: #555;
-            position: absolute;
+            position: absolute; /* Allows it to fly */
+            right: 20%; /* Start next to Yes button */
+            z-index: 90;
+            transition: all 0.2s ease; /* Smooth flight */
         }
     </style>
 </head>
 <body>
 
     <audio id="bgMusic" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/09/audio_c8c8a73467.mp3?filename=piano-moment-11176.mp3" type="audio/mpeg">
+        <source src="music.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/audio/2022/03/09/audio_c8c8a73467.mp3" type="audio/mpeg">
     </audio>
 
     <div class="hearts-bg" id="heartsBg"></div>
 
     <div class="container active" id="step0">
-        <p style="font-size: 1.5rem;">For my favorite person...</p>
+        <p style="font-size: 1.3rem;">For my favorite person...</p>
         <button class="btn next-btn" onclick="startJourney()">Tap to Open ❤️</button>
     </div>
 
     <div class="container" id="step1">
-        <img src="us.jpeg" alt= "us">
+        <img src="us.jpeg" alt="us" onerror="this.src='https://media.tenor.com/2yE7eXlG0p8AAAAi/milk-and-mocha-bear.gif'">
         
         <div class="poem-lines">
             <span class="poem-line">तुम्हारे साथ रहकर अक्सर मुझे ऐसा महसूस हुआ है</span>
             <span class="poem-line">कि दिशाएँ पास आ गई हैं,<br>हर रास्ता छोटा हो गया है...</span>
         </div>
-        
         <button class="btn next-btn" onclick="nextPoem(2)">Next</button>
     </div>
 
     <div class="container" id="step2">
-        <img src="us.jpeg" alt="us">
+        <img src="us.jpeg" alt="us" onerror="this.src='https://media.tenor.com/Z4o4q1WhVnAAAAAi/milk-and-mocha-hug.gif'">
         
         <div class="poem-lines">
             <span class="poem-line">दुनिया सिमटकर एक आँगन-सी बन गई है</span>
             <span class="poem-line">जो खचाखच भरा है, कहीं भी एकांत नहीं...</span>
             <span class="poem-line" style="color: #ff4d6d; font-weight: bold;">न बाहर, न भीतर।</span>
         </div>
-
         <button class="btn next-btn" onclick="goToQuestion()">❤️</button>
     </div>
 
     <div class="container" id="question-screen">
-        <img src="us.jpeg" alt="us">
+        <img src="us.jpeg" alt="us" onerror="this.src='https://media.tenor.com/f1Xb0r1b6WwAAAAi/cute-bear.gif'">
         <h1 class="question-title">Will you be my Valentine?</h1>
         
         <div class="btn-group">
@@ -213,88 +215,100 @@
 
     <div class="container" id="success-screen">
         <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Happy Bear">
-        <h1 class="question-title" style="font-size: 2rem;">I knew it! ❤️</h1>
+        <h1 class="question-title">I knew it! ❤️</h1>
         <p>You + Me = Forever</p>
     </div>
 
     <script>
-        // Music & Animation Setup
         const music = document.getElementById('bgMusic');
         music.volume = 0.5;
 
+        // --- Background Hearts Animation ---
         function createHearts() {
             const container = document.getElementById('heartsBg');
-            const heartCount = 20;
-            for(let i=0; i<heartCount; i++){
+            for(let i=0; i<15; i++){
                 const heart = document.createElement('div');
                 heart.classList.add('heart-float');
                 heart.innerHTML = '❤';
                 heart.style.left = Math.random() * 100 + '%';
-                heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
-                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 3 + 6) + 's';
+                heart.style.fontSize = (Math.random() * 15 + 10) + 'px';
                 heart.style.animationDelay = Math.random() * 5 + 's';
                 container.appendChild(heart);
             }
         }
         createHearts();
 
-        // Navigation Logic
+        // --- Navigation Logic ---
         function startJourney() {
-            music.play().catch(e => console.log("Audio requires interaction"));
+            // Try to play music
+            music.play().then(() => {
+                console.log("Music playing");
+            }).catch(error => {
+                console.log("Music blocked: " + error);
+                alert("Please tap anywhere to enable the music! 🎵");
+                document.body.addEventListener('click', () => music.play(), { once: true });
+            });
+
             document.getElementById('step0').classList.remove('active');
             document.getElementById('step1').classList.add('active');
-            
-            // Animate lines for first poem part
-            setTimeout(() => {
-                const lines = document.querySelectorAll('#step1 .poem-line');
-                lines.forEach((line, index) => {
-                    setTimeout(() => line.classList.add('visible'), index * 1500);
-                });
-            }, 500);
+            animateLines(1);
         }
 
         function nextPoem(step) {
             document.getElementById('step' + (step-1)).classList.remove('active');
             document.getElementById('step' + step).classList.add('active');
+            animateLines(step);
+        }
 
-            // Animate lines for second poem part
+        function animateLines(step) {
             setTimeout(() => {
-                const lines = document.querySelectorAll('#step2 .poem-line');
+                const lines = document.querySelectorAll('#step' + step + ' .poem-line');
                 lines.forEach((line, index) => {
-                    setTimeout(() => line.classList.add('visible'), index * 1500);
+                    setTimeout(() => line.classList.add('visible'), index * 1000);
                 });
-            }, 500);
+            }, 300);
         }
 
         function goToQuestion() {
             document.getElementById('step2').classList.remove('active');
-            // Change background to soft pink for the question
+            // Change theme to pink
             document.body.style.backgroundColor = "#ffe6e6";
             document.body.style.color = "#333";
-            
             document.getElementById('question-screen').classList.add('active');
+            
+            // Initialize the flying button
             initRunawayBtn();
         }
 
-        // Runaway Button Logic
+        // --- The "Runaway" Logic ---
         function initRunawayBtn() {
             const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            
             const moveBtn = (e) => {
-                if(e) e.preventDefault();
-                const container = document.querySelector('.btn-group');
-                // Calculate boundaries within viewport
-                const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-                const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+                // Prevent default click behavior
+                if(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                
+                // Get screen size
+                const maxWidth = window.innerWidth - noBtn.offsetWidth - 20; 
+                const maxHeight = window.innerHeight - noBtn.offsetHeight - 20;
 
-                const randomX = Math.random() * maxX;
-                const randomY = Math.random() * maxY;
+                // Random new position
+                const randomX = Math.random() * maxWidth;
+                const randomY = Math.random() * maxHeight;
 
-                noBtn.style.position = 'fixed';
+                noBtn.style.position = 'fixed'; // Break it out of the layout
                 noBtn.style.left = randomX + 'px';
                 noBtn.style.top = randomY + 'px';
             }
             
-            noBtn.addEventListener('touchstart', moveBtn);
+            // Add listeners for all interaction types
+            noBtn.addEventListener('touchstart', moveBtn, { passive: false });
+            noBtn.addEventListener('mousedown', moveBtn);
             noBtn.addEventListener('mouseover', moveBtn);
             noBtn.addEventListener('click', moveBtn);
         }
@@ -303,7 +317,7 @@
             document.getElementById('question-screen').classList.remove('active');
             document.getElementById('success-screen').classList.add('active');
             
-            // Massive Confetti
+            // Celebration Confetti
             const duration = 3000;
             const end = Date.now() + duration;
             (function frame() {
@@ -314,6 +328,4 @@
         }
     </script>
 </body>
-
 </html>
-
